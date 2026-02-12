@@ -49,6 +49,11 @@ class Projects extends CI_Controller {
             'carpenter_id'   => $this->input->post('carpenter_id'),
             'painter_id'     => $this->input->post('painter_id'),
             'electrician_id' => $this->input->post('electrician_id'),
+            'customer_name'       => $this->input->post('customer_name'),
+    'buyers_order_no'     => $this->input->post('buyers_order_no'),
+    'po_date'             => $this->input->post('po_date'),
+    'project_external_id' => $this->input->post('project_external_id'),
+    'order_id'            => $this->input->post('order_id'),
             'status'         => 1
         ];
 
@@ -142,19 +147,16 @@ public function generate_invoice($id) {
     $data['project'] = $this->db->get_where('project_details', ['id' => id])->row();
     $this->load->view('invoice_view', $data);
 }
-public function invoice($project_id) {
-    // 1. Fetch project data from database
-    $this->db->select('*');
-    $this->db->from('project_details');
-    $this->db->where('id', $project_id);
-    $data['project'] = $this->db->get()->row();
-
-    // 2. Load the view we just created
-    if($data['project']) {
-        $this->load->view('generate_invoice', $data);
-    } else {
-        show_404();
+public function invoice($project_id, $invoice_id = NULL) {
+    // Get Project/Client details
+    $data['project'] = $this->db->get_where('project_details', ['id' => $project_id])->row();
+    
+    // Get the specific invoice record if ID is provided
+    if($invoice_id) {
+        $data['saved_invoice'] = $this->db->get_where('project_invoices', ['id' => $invoice_id])->row();
     }
+
+    $this->load->view('generate_invoice', $data);
 }
 }
 ?>

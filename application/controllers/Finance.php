@@ -9,26 +9,51 @@ class Finance extends CI_Controller {
         if (!$this->session->userdata('user_id')) { redirect('auth'); }
     }
 
-    // Generate Invoice No: SK/26/001
-    private function get_next_invoice_no() {
-        $prefix = "SK/" . date('y') . "/";
-        $last = $this->db->select('invoice_no')->like('invoice_no', $prefix)
-                         ->order_by('id', 'DESC')->limit(1)
-                         ->get('project_invoices')->row();
-        $num = $last ? (int)substr($last->invoice_no, -3) + 1 : 1;
-        return $prefix . str_pad($num, 3, '0', STR_PAD_LEFT);
+   
+
+    public function get_next_invoice_no() {
+    // 1. Get the last invoice created
+    $last_invoice = $this->db->select('invoice_no')
+                             ->order_by('id', 'DESC')
+                             ->limit(1)
+                             ->get('project_invoices')
+                             ->row();
+
+    if ($last_invoice) {
+        // 2. Extract the number from 'SK/26/001'
+        // We split by '/' and get the last part
+        $parts = explode('/', $last_invoice->invoice_no);
+        $last_num = (int) end($parts);
+        $new_num = $last_num + 1;
+    } else {
+        // Start with 1 if no invoices exist
+        $new_num = 1;
     }
 
-    public function add_invoice() {
-        $data = [
-            'project_id'   => $this->input->post('project_id'),
-            'invoice_no'   => $this->get_next_invoice_no(),
-            'amount'        => $this->input->post('amount'),
-            'invoice_date' => $this->input->post('date')
-        ];
-        $this->db->insert('project_invoices', $data);
-        redirect('projects/view/' . $data['project_id']);
-    }
+    // 3. Format it back to SK/26/001 (padding with 3 zeros)
+    $current_year = date('y');
+    return "SK/" . $current_year . "/" . str_pad($new_num, 3, '0', STR_PAD_LEFT);
+}
+
+  public function add_invoice() {
+    $project_id = $this->input->post('project_id');
+    
+    $data = [
+        'project_id'   => $project_id,
+        'invoice_no'   => $this->get_next_invoice_no(),
+        'amount'       => $this->input->post('amount'),
+        'invoice_date' => $this->input->post('date'),
+        'description'  => $this->input->post('description'),
+        'hsn_code'     => $this->input->post('hsn_code')
+    ];
+
+    // Save to your existing table
+    $this->db->insert('project_invoices', $data);
+    $invoice_id = $this->db->insert_id();
+
+    // Redirect to the generator
+    redirect('projects/invoice/' . $project_id . '/' . $invoice_id);
+}
 
    // Standard upload configuration
     private function do_upload($field_name) {

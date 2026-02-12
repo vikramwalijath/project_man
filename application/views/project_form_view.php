@@ -25,6 +25,26 @@
                     </div>
                 </div>
 
+                <h6 class="text-success fw-bold mb-3 border-bottom pb-2">Order Reference (for Invoicing)</h6>
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <label>Buyer's Order No. (PO Number)</label>
+                        <input type="text" name="buyers_order_no" class="form-control" value="<?= isset($project) ? $project->buyers_order_no : 'PO-LIV-11269-2025-2026/96897' ?>">
+                    </div>
+                    <div class="col-md-2">
+                        <label>PO Confirmed Date</label>
+                        <input type="date" name="po_date" class="form-control" value="<?= isset($project) ? $project->po_date : date('Y-m-d') ?>" placeholder="DD-MM-YYYY">
+                    </div>
+                    <div class="col-md-3">
+                        <label>External Project Id</label>
+                        <input type="text" name="project_external_id" class="form-control" value="<?= isset($project) ? $project->project_external_id : '' ?>" placeholder="e.g. 4326325">
+                    </div>
+                    <div class="col-md-3">
+                        <label>Order Id</label>
+                        <input type="text" name="order_id" class="form-control" value="<?= isset($project) ? $project->order_id : '' ?>" placeholder="e.g. 178378">
+                    </div>
+                </div>
+
                 <h6 class="text-primary fw-bold mb-3 border-bottom pb-2">Team Assignment</h6>
                 <div class="row mb-4">
                     <div class="col-md-4">
