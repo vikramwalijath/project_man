@@ -1,39 +1,36 @@
 <div class="container mt-4">
-    <div class="d-flex justify-content-between mb-3">
-        <h2>Employee Masters</h2>
-        <a href="<?= base_url('employees/form'); ?>" class="btn btn-primary">+ Add New</a>
-    </div>
+    <h3 class="fw-bold">
+        <i class="bi bi-cash-stack text-success"></i> Payments for <?= ucfirst($employee->name) ?>
+    </h3>
+    <p class="text-muted">Phone: <?= $employee->phone ?></p>
 
-    <table class="table table-bordered bg-white shadow-sm">
-        <thead class="table-dark">
-            <tr>
-                <th>Name</th>
-                <th>Category</th>
-                <th>Phone</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php 
-            $types = ['carpenter' => $carpenters, 'painter' => $painters, 'electrician' => $electricians];
-            foreach($types as $label => $list): 
-                foreach($list as $row): ?>
-                <tr>
-                    <td><?= $row->name ?></td>
-                    <td><span class="badge bg-secondary"><?= ucfirst($label) ?></span></td>
-                    <td><?= $row->phone ?></td>
-                    <td>
-                        <a href="<?= base_url("employees/form/$label/$row->id"); ?>" class="btn btn-sm btn-warning">
-                             Edit
-                        </a>
-                        <a href="<?= base_url("employees/delete/$label/$row->id"); ?>" 
-                           class="btn btn-sm btn-danger" 
-                           onclick="return confirm('Are you sure?')">
-                             Delete
-                        </a>
-                    </td>
-                </tr>
-            <?php endforeach; endforeach; ?>
-        </tbody>
-    </table>
+    <div class="card shadow-sm border-0 mt-3">
+        <div class="card-body">
+            <table id="paymentTable" class="table table-hover align-middle" style="width:100%">
+                <thead class="table-light">
+                    <tr>
+                        <th>Date</th>
+                        <th>Project</th>
+                        <th>Customer</th>
+                        <th>Vendor</th>
+                        <th>Amount</th>
+                        <th>Remarks</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach($payments as $p): ?>
+                    <tr>
+                        <td><?= $p->payment_date ? date('d M, Y', strtotime($p->payment_date)) : '---' ?></td>
+                        <td><?= $p->project_name ?: '---' ?></td>
+                        <td><?= $p->customer_name ?: '---' ?></td>
+                        <td><?= $p->vendor_name ?: '---' ?></td>
+                        <td class="fw-bold text-success"><?= $p->amount ? '₹'.number_format($p->amount,2) : '---' ?>
+                        </td>
+                        <td><?= $p->remarks ?: '---' ?></td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>

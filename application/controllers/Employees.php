@@ -1,74 +1,85 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined( 'BASEPATH' ) OR exit( 'No direct script access allowed' );
 
 class Employees extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->library(['session']);
-        $this->load->helper('url');
-        if (!$this->session->userdata('user_id')) { redirect('auth'); }
-    }
-
-    // 1. LIST ALL (Only showing active status = 1)
-    public function index() {
-        $data['carpenters'] = $this->db->get_where('carpenter_master', ['status' => 1])->result();
-        $data['painters'] = $this->db->get_where('painter_master', ['status' => 1])->result();
-        $data['electricians'] = $this->db->get_where('electrician_master', ['status' => 1])->result();
-
-        $this->load->view('common/header_logged_in');
-        $this->load->view('employee_list_view', $data);
-        $this->load->view('common/footer');
-    }
-
-    // 2. ADD / EDIT VIEW
-    public function form($type = '', $id = '') {
-        $data['type'] = $type;
-        $data['employee'] = null;
-
-        // If ID is provided, we are EDITING
-        if ($id) {
-            $table = $type . '_master';
-            $data['employee'] = $this->db->get_where($table, ['id' => $id])->row();
+        $this->load->library( [ 'session' ] );
+        $this->load->helper( 'url' );
+        if ( !$this->session->userdata( 'user_id' ) ) {
+            redirect( 'auth' );
         }
-
-        $this->load->view('common/header_logged_in');
-        $this->load->view('employee_form_view', $data);
-        $this->load->view('common/footer');
     }
 
-    // 3. SAVE or UPDATE
-    public function save() {
-        $type = $this->input->post('emp_type');
-        $id = $this->input->post('id');
-        $table = $type . '_master';
+    // Show all employees
+
+    public function index() {
+        $data[ 'carpenters' ]   = $this->db->get_where( 'carpenter_master', [ 'status' => 1 ] )->result();
+        $data[ 'painters' ]     = $this->db->get_where( 'painter_master', [ 'status' => 1 ] )->result();
+        $data[ 'electricians' ] = $this->db->get_where( 'electrician_master', [ 'status' => 1 ] )->result();
+
+        $this->load->view( 'common/header_logged_in' );
+        $this->load->view( 'employee_list_view', $data );
+        $this->load->view( 'common/footer' );
+    }
+
+    // Add employee payment
+
+    public function add_employee_payment() {
+        $project_id = $this->input->post( 'project_id' );
+
+        // Split combined 'type|id'
+        $worker_data = explode( '|', $this->input->post( 'worker_info' ) );
+        $emp_type = ucfirst( $worker_data[ 0 ] );
+        // Carpenter / Painter / Electrician
+        $emp_id   = $worker_data[ 1 ];
+
+        // Upload file ( receipt, proof, etc. )
+        $file = $this->do_upload( 'attachment' );
+        // implement do_upload()
 
         $data = [
-            'name' => $this->input->post('name'),
-            'phone' => $this->input->post('phone'),
-            'status' => 1
+            'project_id'      => $project_id,
+            'employee_id'     => $emp_id,
+            'employee_type'   => $emp_type,
+            'amount_paid'     => $this->input->post( 'amount_paid' ),
+            'payment_date'    => $this->input->post( 'payment_date' ),
+            'paid_by'         => $this->input->post( 'paid_by' ), // Cash/UPI/Cheque/Bank Transfer
+            'remarks'         => $this->input->post( 'remarks' ),
+            'file_attachment' => $file,
+            'created_by'      => $this->session->userdata( 'user_id' )
         ];
 
-        if ($id) {
-            // Update existing
-            $this->db->where('id', $id);
-            $this->db->update($table, $data);
-            $this->session->set_flashdata('success', 'Updated successfully!');
-        } else {
-            // Insert new
-            $this->db->insert($table, $data);
-            $this->session->set_flashdata('success', 'Added successfully!');
-        }
-        redirect('employees');
+        $this->db->insert( 'employee_payments', $data );
+        $this->session->set_flashdata( 'success', 'Employee payment saved!' );
+        redirect( 'projects/view/' . $project_id );
     }
 
-    // 4. SOFT DELETE (Set status to 0)
-    public function delete($type, $id) {
+    // Show payments for an employee
+
+    public function payments( $type, $id ) {
         $table = $type . '_master';
-        $this->db->where('id', $id);
-        $this->db->update($table, ['status' => 0]);
-        
-        $this->session->set_flashdata('success', 'Employee removed successfully!');
-        redirect('employees');
+        $employee = $this->db->get_where( $table, [ 'id' => $id ] )->row();
+
+        if ( !$employee ) {
+            show_404();
+        }
+
+        $this->db->select( 'ep.id, ep.amount_paid, ep.payment_date, ep.paid_by, ep.remarks, ep.file_attachment, ep.created_by,
+                           pr.project_name, pr.customer_name, v.vendor_name' );
+        $this->db->from( 'employee_payments ep' );
+        $this->db->join( 'project_details pr', 'ep.project_id = pr.id', 'left' );
+        $this->db->join( 'vendor_master v', 'pr.vendor_id = v.id', 'left' );
+        $this->db->where( 'ep.employee_type', ucfirst( $type ) );
+        $this->db->where( 'ep.employee_id', $id );
+
+        $data[ 'employee' ] = $employee;
+        $data[ 'payments' ] = $this->db->get()->result();
+
+        $this->load->view( 'common/header_logged_in' );
+        $this->load->view( 'employee_payment_view', $data );
+        $this->load->view( 'common/footer' );
     }
+
 }

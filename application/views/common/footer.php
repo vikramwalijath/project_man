@@ -6,11 +6,47 @@
 <script>
 $(document).ready(function() {
     $('#projectTable').DataTable({
-        "order": [[ 0, "desc" ]], // Sort by Date by default
+        "order": [
+            [0, "desc"]
+        ], // Sort by Date by default
         "pageLength": 10,
         "language": {
             "search": "_INPUT_",
             "searchPlaceholder": "Search projects, clients, or workers..."
+        }
+    });
+});
+
+$(document).ready(function() {
+    $('#vendorTable').DataTable({
+        "pageLength": 10,
+        "lengthMenu": [5, 10, 25, 50],
+        "ordering": true,
+        "searching": true,
+        "language": {
+            "search": "Search Vendors:"
+        }
+    });
+});
+$(document).ready(function() {
+    $('#paymentTable').DataTable({
+        "pageLength": 10,
+        "lengthMenu": [5, 10, 25, 50],
+        "ordering": true,
+        "searching": true,
+        "language": {
+            "search": "Search Payments:"
+        }
+    });
+});
+$(document).ready(function() {
+    $('#invoiceTable').DataTable({
+        "pageLength": 10,
+        "lengthMenu": [5, 10, 25, 50],
+        "ordering": true,
+        "searching": true,
+        "language": {
+            "search": "Search Invoices:"
         }
     });
 });

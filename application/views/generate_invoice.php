@@ -6,39 +6,186 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Savikan Interiors - Invoice</title>
     <style>
-        /* [I am keeping all your CSS exactly as you provided it] */
-        body { font-family: Arial, sans-serif; font-size: 11px; margin: 20px; color: #000; }
-        .invoice-container { width: 800px; margin: auto; border: 1px solid #000; }
-        .header-main { display: flex; border-bottom: 1px solid #000; }
-        .header-left { width: 50%; padding: 12px; border-right: none; }
-        .header-right { width: 50%; padding: 0; display: flex; flex-direction: column; }
-        .title-bar { text-align: center; font-size: 22px; color: #2e75b6; border-bottom: 1px solid #000; padding: 8px; font-weight: bold; background-color: #fcfcfc; }
-        .supplier-info h2 { margin: 0 0 8px 0; font-size: 20px; color: #000; }
-        .supplier-details { line-height: 1.5; font-size: 11px; }
-        .metadata-table { width: 100%; border-collapse: collapse; height: 100%; }
-        .metadata-table td { border: none; border-bottom: 1px solid #000; border-left: 1px solid #000; padding: 6px 8px; width: 50%; }
-        .metadata-table tr:last-child td { border-bottom: none; }
-        .label-text { display: block; font-size: 10px; color: #444; margin-bottom: 2px; }
-        .value-text { font-weight: bold; font-size: 11px; }
-        .logo-section { padding: 10px; text-align: right; border-bottom: 1px solid #000; border-left: 1px solid #000; }
-        .logo-section img { max-width: 140px; height: auto; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { border: 1px solid #000; padding: 6px; vertical-align: top; }
-        .buyer-section { padding: 12px; border-bottom: 1px solid #000; line-height: 1.6; background-color: #fafafa; }
-        input { border: none; font-family: inherit; font-size: inherit; font-weight: bold; width: 100%; background: transparent; }
-        input:focus { background: #fffde7; outline: none; }
-        .num-column { text-align: right; }
-        .hsn-summary th { background: #f2f2f2; font-size: 10px; }
-        .bank-details { display: flex; border-top: 1px solid #000; }
-        .bank-info { width: 70%; padding: 10px; line-height: 1.5; }
-        .signature-area { width: 30%; text-align: center; padding: 10px; }
-        .sign-img { height: 75px; margin: 5px 0; }
-        @media print {
-            @page { size: A4; margin: 10mm; }
-            .no-print { display: none; }
-            body { margin: 0; padding: 0; }
-            .invoice-container { width: 98% !important; margin: 0 !important; border: 1px solid #000; }
+    /* [I am keeping all your CSS exactly as you provided it] */
+    body {
+        font-family: Arial, sans-serif;
+        font-size: 11px;
+        margin: 20px;
+        color: #000;
+    }
+
+    .invoice-container {
+        width: 800px;
+        margin: auto;
+        border: 1px solid #000;
+    }
+
+    .header-main {
+        display: flex;
+        border-bottom: 1px solid #000;
+    }
+
+    .header-left {
+        width: 50%;
+        padding: 12px;
+        border-right: none;
+    }
+
+    .header-right {
+        width: 50%;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .title-bar {
+        text-align: center;
+        font-size: 22px;
+        color: #2e75b6;
+        border-bottom: 1px solid #000;
+        padding: 8px;
+        font-weight: bold;
+        background-color: #fcfcfc;
+    }
+
+    .supplier-info h2 {
+        margin: 0 0 8px 0;
+        font-size: 20px;
+        color: #000;
+    }
+
+    .supplier-details {
+        line-height: 1.5;
+        font-size: 11px;
+    }
+
+    .metadata-table {
+        width: 100%;
+        border-collapse: collapse;
+        height: 100%;
+    }
+
+    .metadata-table td {
+        border: none;
+        border-bottom: 1px solid #000;
+        border-left: 1px solid #000;
+        padding: 6px 8px;
+        width: 50%;
+    }
+
+    .metadata-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    .label-text {
+        display: block;
+        font-size: 10px;
+        color: #444;
+        margin-bottom: 2px;
+    }
+
+    .value-text {
+        font-weight: bold;
+        font-size: 11px;
+    }
+
+    .logo-section {
+        padding: 10px;
+        text-align: right;
+        border-bottom: 1px solid #000;
+        border-left: 1px solid #000;
+    }
+
+    .logo-section img {
+        max-width: 140px;
+        height: auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th,
+    td {
+        border: 1px solid #000;
+        padding: 6px;
+        vertical-align: top;
+    }
+
+    .buyer-section {
+        padding: 12px;
+        border-bottom: 1px solid #000;
+        line-height: 1.6;
+        background-color: #fafafa;
+    }
+
+    input {
+        border: none;
+        font-family: inherit;
+        font-size: inherit;
+        font-weight: bold;
+        width: 100%;
+        background: transparent;
+    }
+
+    input:focus {
+        background: #fffde7;
+        outline: none;
+    }
+
+    .num-column {
+        text-align: right;
+    }
+
+    .hsn-summary th {
+        background: #f2f2f2;
+        font-size: 10px;
+    }
+
+    .bank-details {
+        display: flex;
+        border-top: 1px solid #000;
+    }
+
+    .bank-info {
+        width: 70%;
+        padding: 10px;
+        line-height: 1.5;
+    }
+
+    .signature-area {
+        width: 30%;
+        text-align: center;
+        padding: 10px;
+    }
+
+    .sign-img {
+        height: 75px;
+        margin: 5px 0;
+    }
+
+    @media print {
+        @page {
+            size: A4;
+            margin: 10mm;
         }
+
+        .no-print {
+            display: none;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        .invoice-container {
+            width: 98% !important;
+            margin: 0 !important;
+            border: 1px solid #000;
+        }
+    }
     </style>
 </head>
 
@@ -79,11 +226,13 @@
                     <tr>
                         <td>
                             <span class="label-text">Invoice No.</span>
-                            <span class="value-text"><input type="text" value="<?= $saved_invoice->invoice_no ?>"></span>
+                            <span class="value-text"><input type="text"
+                                    value="<?= $saved_invoice->invoice_no ?>"></span>
                         </td>
                         <td>
                             <span class="label-text">Invoice Date</span>
-                            <span class="value-text"><input type="text" value="<?= date('d-m-Y', strtotime($saved_invoice->invoice_date)) ?>"></span>
+                            <span class="value-text"><input type="text"
+                                    value="<?= date('d-m-Y', strtotime($saved_invoice->invoice_date)) ?>"></span>
                         </td>
                     </tr>
                     <tr>
@@ -94,7 +243,8 @@
                     <tr>
                         <td colspan="2">
                             <span class="label-text">Buyer's Order No.</span>
-                            <span class="value-text"><input type="text" value="<?= $project->buyers_order_no  ?>"></span>
+                            <span class="value-text"><input type="text"
+                                    value="<?= $project->buyers_order_no  ?>"></span>
                         </td>
                     </tr>
                     <tr>
@@ -104,13 +254,15 @@
                         </td>
                         <td>
                             <span class="label-text">Project Id</span>
-                            <span class="value-text"><input type="text" value="<?= $project->project_external_id ?>"></span>
+                            <span class="value-text"><input type="text"
+                                    value="<?= $project->project_external_id ?>"></span>
                         </td>
                     </tr>
                     <tr>
                         <td>
                             <span class="label-text">Order Id</span>
-                            <span class="value-text"><input type="text" value="<?= $project->order_id ?? '178378' ?>"></span>
+                            <span class="value-text"><input type="text"
+                                    value="<?= $project->order_id ?? '178378' ?>"></span>
                         </td>
                         <td>
                             <span class="label-text">Customer Name</span>
@@ -125,7 +277,8 @@
             <span class="label-text" style="font-weight: bold; color: #000;">Buyer Details:</span>
             <strong>LIVSPACE INDIA PRIVATE LIMITED</strong><br>
             <strong>GSTIN: 27AADCH4222R2Z8</strong><br>
-            <span style="font-size: 10px; color: #555;">[Formerly- Home Interior Designs ECommerce Private Limited]</span><br>
+            <span style="font-size: 10px; color: #555;">[Formerly- Home Interior Designs ECommerce Private
+                Limited]</span><br>
             Final Plot No 405A, SAI CAPITAL, CTS NO 984A TPS NO 1, Sai Spacecon, Senapati Bapat Road,<br>
             Pune, Maharashtra, India - Pin: 411004
         </div>
@@ -144,11 +297,13 @@
             <tbody>
                 <tr>
                     <td style="text-align: center;">1</td>
-            <td><?= !empty($saved_invoice->description) ? $saved_invoice->description : 'Interior Works' ?></td>
-                    <td><input type="text" id="hsn-input" value="<?= $saved_invoice->hsn_code ?>" oninput="updateHsnLabel()" readonly></td>
+                    <td><?= !empty($saved_invoice->description) ? $saved_invoice->description : 'Interior Works' ?></td>
+                    <td><input type="text" id="hsn-input" value="<?= $project->hsn_code ?>" oninput="updateHsnLabel()"
+                            readonly></td>
                     <td><input type="number" id="qty" value="1" oninput="updateByCalculation()" readonly></td>
                     <td><input type="text" id="rate" value="0" oninput="updateByCalculation()"></td>
-                    <td><input type="text" id="base-amount" class="num-column" value="0.00" readonly oninput="updateByManualAmount()"></td>
+                    <td><input type="text" id="base-amount" class="num-column" value="0.00" readonly
+                            oninput="updateByManualAmount()"></td>
                 </tr>
                 <tr>
                     <td colspan="4" rowspan="2" style="border-bottom: none;"></td>
@@ -162,8 +317,8 @@
                 <tr style="font-weight:bold; background:#f2f2f2;">
                     <td colspan="5" style="text-align:right;">Total</td>
                     <td class="num-column">
-                        <input type="text" id="grand-total" style="text-align: right; font-weight: bold;" value="<?= $saved_invoice->amount ?>"
-                            step="0.01" oninput="updateByReverseTotal()" readonly>
+                        <input type="text" id="grand-total" style="text-align: right; font-weight: bold;"
+                            value="<?= $saved_invoice->amount ?>" step="0.01" oninput="updateByReverseTotal()" readonly>
                     </td>
                 </tr>
             </tbody>
@@ -191,7 +346,7 @@
             </thead>
             <tbody>
                 <tr>
-                    <td id="hsn-summary-val"><?= $saved_invoice->hsn_code ?></td>
+                    <td id="hsn-summary-val"><?= $project->hsn_code ?></td>
                     <td id="taxable-summary-val">0.00</td>
                     <td>9%</td>
                     <td id="central-tax-summary">0.00</td>
@@ -229,69 +384,73 @@
     </div>
 
     <script>
-        // Your existing JS functions [No changes made to logic]
-        function updateHsnLabel() {
-            document.getElementById('hsn-summary-val').innerText = document.getElementById('hsn-input').value;
+    // Your existing JS functions [No changes made to logic]
+    function updateHsnLabel() {
+        document.getElementById('hsn-summary-val').innerText = document.getElementById('hsn-input').value;
+    }
+
+    function updateByCalculation() {
+        const qty = parseFloat(document.getElementById('qty').value) || 0;
+        const rate = parseFloat(document.getElementById('rate').value) || 0;
+        const amount = qty * rate;
+        document.getElementById('base-amount').value = amount.toFixed(2);
+        calculateFinals(amount);
+    }
+
+    function updateByManualAmount() {
+        const amount = parseFloat(document.getElementById('base-amount').value) || 0;
+        calculateFinals(amount);
+    }
+
+    function updateByReverseTotal() {
+        const total = parseFloat(document.getElementById('grand-total').value) || 0;
+        const taxable = total / 1.18;
+        document.getElementById('base-amount').value = taxable.toFixed(2);
+        document.getElementById('rate').value = taxable.toFixed(2);
+        calculateFinals(taxable, true);
+    }
+
+    function calculateFinals(taxableValue, isReverse = false) {
+        const cgst = taxableValue * 0.09;
+        const sgst = taxableValue * 0.09;
+        const total = taxableValue + cgst + sgst;
+
+        document.getElementById('cgst-display').innerText = cgst.toFixed(2);
+        document.getElementById('sgst-display').innerText = sgst.toFixed(2);
+
+        if (!isReverse) {
+            document.getElementById('grand-total').value = total.toFixed(2);
         }
 
-        function updateByCalculation() {
-            const qty = parseFloat(document.getElementById('qty').value) || 0;
-            const rate = parseFloat(document.getElementById('rate').value) || 0;
-            const amount = qty * rate;
-            document.getElementById('base-amount').value = amount.toFixed(2);
-            calculateFinals(amount);
-        }
+        document.getElementById('taxable-summary-val').innerText = taxableValue.toFixed(2);
+        document.getElementById('taxable-summary-total').innerText = taxableValue.toFixed(2);
+        document.getElementById('central-tax-summary').innerText = cgst.toFixed(2);
+        document.getElementById('central-tax-total').innerText = cgst.toFixed(2);
+        document.getElementById('state-tax-summary').innerText = sgst.toFixed(2);
+        document.getElementById('state-tax-total').innerText = sgst.toFixed(2);
+        document.getElementById('total-tax-summary').innerText = (cgst + sgst).toFixed(2);
+        document.getElementById('total-tax-grand').innerText = (cgst + sgst).toFixed(2);
 
-        function updateByManualAmount() {
-            const amount = parseFloat(document.getElementById('base-amount').value) || 0;
-            calculateFinals(amount);
-        }
+        document.getElementById('words-area').innerText = numberToWords(Math.round(total)) + " Only";
+    }
 
-        function updateByReverseTotal() {
-            const total = parseFloat(document.getElementById('grand-total').value) || 0;
-            const taxable = total / 1.18;
-            document.getElementById('base-amount').value = taxable.toFixed(2);
-            document.getElementById('rate').value = taxable.toFixed(2);
-            calculateFinals(taxable, true);
-        }
-
-        function calculateFinals(taxableValue, isReverse = false) {
-            const cgst = taxableValue * 0.09;
-            const sgst = taxableValue * 0.09;
-            const total = taxableValue + cgst + sgst;
-
-            document.getElementById('cgst-display').innerText = cgst.toFixed(2);
-            document.getElementById('sgst-display').innerText = sgst.toFixed(2);
-
-            if (!isReverse) {
-                document.getElementById('grand-total').value = total.toFixed(2);
-            }
-
-            document.getElementById('taxable-summary-val').innerText = taxableValue.toFixed(2);
-            document.getElementById('taxable-summary-total').innerText = taxableValue.toFixed(2);
-            document.getElementById('central-tax-summary').innerText = cgst.toFixed(2);
-            document.getElementById('central-tax-total').innerText = cgst.toFixed(2);
-            document.getElementById('state-tax-summary').innerText = sgst.toFixed(2);
-            document.getElementById('state-tax-total').innerText = sgst.toFixed(2);
-            document.getElementById('total-tax-summary').innerText = (cgst + sgst).toFixed(2);
-            document.getElementById('total-tax-grand').innerText = (cgst + sgst).toFixed(2);
-
-            document.getElementById('words-area').innerText = numberToWords(Math.round(total)) + " Only";
-        }
-
-        function numberToWords(num) {
-            var a = ['', 'One ', 'Two ', 'Three ', 'Four ', 'Five ', 'Six ', 'Seven ', 'Eight ', 'Nine ', 'Ten ', 'Eleven ', 'Twelve ', 'Thirteen ', 'Fourteen ', 'Fifteen ', 'Sixteen ', 'Seventeen ', 'Eighteen ', 'Nineteen '];
-            var b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
-            if ((num = num.toString()).length > 9) return 'overflow';
-            n = ('000000000' + num).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
-            if (!n) return ''; var str = '';
-            str += (n[1] != 0) ? (a[Number(n[1])] || b[n[1][0]] + ' ' + a[n[1][1]]) + 'Crore ' : '';
-            str += (n[2] != 0) ? (a[Number(n[2])] || b[n[2][0]] + ' ' + a[n[2][1]]) + 'Lakh ' : '';
-            str += (n[3] != 0) ? (a[Number(n[3])] || b[n[3][0]] + ' ' + a[n[3][1]]) + 'Thousand ' : '';
-            str += (n[4] != 0) ? (a[Number(n[4])] || b[n[4][0]] + ' ' + a[n[4][1]]) + 'Hundred ' : '';
-            str += (n[5] != 0) ? ((str != '') ? 'and ' : '') + (a[Number(n[5])] || b[n[5][0]] + ' ' + a[n[5][1]]) : '';
-            return str;
-        }
+    function numberToWords(num) {
+        var a = ['', 'One ', 'Two ', 'Three ', 'Four ', 'Five ', 'Six ', 'Seven ', 'Eight ', 'Nine ', 'Ten ', 'Eleven ',
+            'Twelve ', 'Thirteen ', 'Fourteen ', 'Fifteen ', 'Sixteen ', 'Seventeen ', 'Eighteen ', 'Nineteen '
+        ];
+        var b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+        if ((num = num.toString()).length > 9) return 'overflow';
+        n = ('000000000' + num).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
+        if (!n) return '';
+        var str = '';
+        str += (n[1] != 0) ? (a[Number(n[1])] || b[n[1][0]] + ' ' + a[n[1][1]]) + 'Crore ' : '';
+        str += (n[2] != 0) ? (a[Number(n[2])] || b[n[2][0]] + ' ' + a[n[2][1]]) + 'Lakh ' : '';
+        str += (n[3] != 0) ? (a[Number(n[3])] || b[n[3][0]] + ' ' + a[n[3][1]]) + 'Thousand ' : '';
+        str += (n[4] != 0) ? (a[Number(n[4])] || b[n[4][0]] + ' ' + a[n[4][1]]) + 'Hundred ' : '';
+        str += (n[5] != 0) ? ((str != '') ? 'and ' : '') + (a[Number(n[5])] || b[n[5][0]] + ' ' + a[n[5][1]]) : '';
+        return str;
+    }
     </script>
 </body>
+
 </html>
