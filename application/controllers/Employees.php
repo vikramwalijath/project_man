@@ -15,13 +15,77 @@ class Employees extends CI_Controller {
     // Show all employees
 
     public function index() {
-        $data[ 'carpenters' ]   = $this->db->get_where( 'carpenter_master', [ 'status' => 1 ] )->result();
-        $data[ 'painters' ]     = $this->db->get_where( 'painter_master', [ 'status' => 1 ] )->result();
-        $data[ 'electricians' ] = $this->db->get_where( 'electrician_master', [ 'status' => 1 ] )->result();
+        // Fetch all active employees with their type
+        $this->db->select( 'e.*, et.type_name' );
+        $this->db->from( 'employees e' );
+        $this->db->join( 'employee_types et', 'et.type_name = e.type', 'left' );
+        $this->db->where( 'e.status', 1 );
+        $data[ 'employees' ] = $this->db->get()->result();
 
         $this->load->view( 'common/header_logged_in' );
         $this->load->view( 'employee_list_view', $data );
         $this->load->view( 'common/footer' );
+    }
+
+    public function form( $id = '' )
+ {
+        $data[ 'employee' ] = null;
+
+        // If ID is provided, we are EDITING
+        if ( $id ) {
+            $data[ 'employee' ] = $this->db->get_where( 'employees', [ 'id' => $id ] )->row();
+        }
+
+        // Load employee types for dropdown
+        $data[ 'employee_types' ] = $this->db->get( 'employee_types' )->result();
+
+        $this->load->view( 'common/header_logged_in' );
+        $this->load->view( 'employee_form_view', $data );
+        $this->load->view( 'common/footer' );
+    }
+
+    // 3. SAVE or UPDATE
+
+    public function save()
+ {
+        $id   = $this->input->post( 'id' );
+        $data = [
+            'name'   => $this->input->post( 'name' ),
+            'phone'  => $this->input->post( 'phone' ),
+            'type'   => $this->input->post( 'type' ),   // comes from dropdown in form
+            'status' => 1
+        ];
+
+        if ( $id ) {
+            // Update existing employee
+            $this->db->where( 'id', $id );
+            $this->db->update( 'employees', $data );
+            $this->session->set_flashdata( 'success', 'Employee updated successfully!' );
+        } else {
+            // Insert new employee
+            $this->db->insert( 'employees', $data );
+            $this->session->set_flashdata( 'success', 'Employee added successfully!' );
+        }
+
+        redirect( 'employees' );
+    }
+
+    // 4. SOFT DELETE ( Set status to 0 )
+
+    public function delete( $id )
+ {
+        $employee = $this->db->get_where( 'employees', [ 'id' => $id ] )->row();
+
+        if ( !$employee ) {
+            $this->session->set_flashdata( 'error', 'Employee not found.' );
+        } else {
+            // Soft delete: set status = 0
+            $this->db->where( 'id', $id );
+            $this->db->update( 'employees', [ 'status' => 0 ] );
+            $this->session->set_flashdata( 'success', 'Employee removed successfully!' );
+        }
+
+        redirect( 'employees' );
     }
 
     // Add employee payment
@@ -58,20 +122,26 @@ class Employees extends CI_Controller {
 
     // Show payments for an employee
 
-    public function payments( $type, $id ) {
-        $table = $type . '_master';
-        $employee = $this->db->get_where( $table, [ 'id' => $id ] )->row();
+    public function payments( $id )
+ {
+        $employee = $this->db->get_where( 'employees', [ 'id' => $id ] )->row();
 
         if ( !$employee ) {
             show_404();
         }
 
-        $this->db->select( 'ep.id, ep.amount_paid, ep.payment_date, ep.paid_by, ep.remarks, ep.file_attachment, ep.created_by,
-                           pr.project_name, pr.customer_name, v.vendor_name' );
+        $this->db->select( 'ep.id, ep.amount_paid, ep.payment_date,
+                       ep.remarks, ep.file_attachment,
+                       u1.name as paid_by_name,
+                       u2.name as created_by_name,
+                       pr.project_name, pr.customer_name, v.vendor_name' );
         $this->db->from( 'employee_payments ep' );
         $this->db->join( 'project_details pr', 'ep.project_id = pr.id', 'left' );
         $this->db->join( 'vendor_master v', 'pr.vendor_id = v.id', 'left' );
-        $this->db->where( 'ep.employee_type', ucfirst( $type ) );
+        $this->db->join( 'users u1', 'u1.id = ep.paid_by', 'left' );
+        // Paid By
+        $this->db->join( 'users u2', 'u2.id = ep.created_by', 'left' );
+        // Created By
         $this->db->where( 'ep.employee_id', $id );
 
         $data[ 'employee' ] = $employee;

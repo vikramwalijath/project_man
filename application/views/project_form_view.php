@@ -87,35 +87,51 @@
                 </div>
 
                 <h6 class="text-primary fw-bold mb-3 border-bottom pb-2">Team Assignment</h6>
-                <div class="row mb-4">
-                    <div class="col-md-4">
-                        <label>Carpenter</label>
-                        <select name="carpenter_id" class="form-select">
-                            <option value="">Select Carpenter</option>
-                            <?php foreach($carpenters as $c): ?><option value="<?= $c->id ?>"
-                                <?= (isset($project) && $project->carpenter_id == $c->id) ? 'selected' : '' ?>>
-                                <?= $c->name ?></option><?php endforeach; ?>
-                        </select>
-                    </div>
-                    <div class="col-md-4">
-                        <label>Painter</label>
-                        <select name="painter_id" class="form-select">
-                            <option value="">Select Painter</option>
-                            <?php foreach($painters as $p): ?><option value="<?= $p->id ?>"
-                                <?= (isset($project) && $project->painter_id == $p->id) ? 'selected' : '' ?>>
-                                <?= $p->name ?></option><?php endforeach; ?>
-                        </select>
-                    </div>
-                    <div class="col-md-4">
-                        <label>Electrician</label>
-                        <select name="electrician_id" class="form-select">
-                            <option value="">Select Electrician</option>
-                            <?php foreach($electricians as $e): ?><option value="<?= $e->id ?>"
-                                <?= (isset($project) && $project->electrician_id == $e->id) ? 'selected' : '' ?>>
-                                <?= $e->name ?></option><?php endforeach; ?>
-                        </select>
-                    </div>
+                <div class="mb-3" <?= !isset($project) ? 'style="display:none;"' : '' ?>>
+                    <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal"
+                        data-bs-target="#teamModal">
+                        <i class="bi bi-plus-circle"></i> Assign Team
+                    </button>
                 </div>
+
+                <?php if(!empty($assigned_team)): ?>
+                <div class="table-responsive">
+                    <div id="assignedTeam">
+                        <?php if(!empty($assigned_team)): ?>
+                        <table class="table table-sm table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Name</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach($assigned_team as $member): ?>
+                                <tr>
+                                    <td><?= $member->type ?></td>
+                                    <td><?= $member->name ?></td>
+                                    <td>
+                                        <a href="<?= base_url('projects/remove_team_assignment/'.$member->id.'/'.$project->id) ?>"
+                                            class="btn btn-sm btn-danger removeMember">
+                                            <i class="bi bi-trash"></i> Remove
+                                        </a>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                        <?php else: ?>
+                        <p class="text-muted">No team members assigned yet.</p>
+                        <?php endif; ?>
+                    </div>
+
+                </div>
+                <?php else: ?>
+                <p class="text-muted">No team members assigned yet.</p>
+                <?php endif; ?>
+
+
 
                 <h6 class="text-primary fw-bold mb-3 border-bottom pb-2">Financials & Location</h6>
                 <div class="row mb-4">
@@ -162,4 +178,103 @@ function c() {
     r.value = ((parseFloat(a.value) || 0) * (1 + (parseFloat(t.value) || 0) / 100)).toFixed(2);
 }
 a.oninput = t.oninput = c;
+</script>
+
+<!-- Team Assignment Modal -->
+<div class="modal fade" id="teamModal" tabindex="-1" aria-labelledby="teamModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="teamForm" action="<?= base_url('projects/save_team_assignment') ?>" method="post">
+                <input type="hidden" name="project_id" value="<?= isset($project) ? $project->id : '' ?>">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="teamModalLabel">Assign Team Member</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Select Type</label>
+                        <select id="employeeType" class="form-select" required>
+                            <option value="">-- Choose Type --</option>
+                            <?php foreach($employee_types as $et): ?>
+                            <option value="<?= $et->type_name ?>"><?= $et->type_name ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Select Employee</label>
+                        <select id="employeeList" name="employee_id" class="form-select" required>
+                            <option value="">-- Choose Employee --</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success"><i class="bi bi-check-circle"></i> Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+$(document).ready(function() {
+    var employees = <?= json_encode($employees) ?>;
+
+    // Debug: check if employees data is loaded
+    console.log(employees);
+
+    $('#employeeType').on('change', function() {
+        var type = $(this).val();
+        var $employeeList = $('#employeeList');
+
+        // Reset dropdown
+        $employeeList.empty().append('<option value="">-- Choose Employee1 --</option>');
+
+        // Filter employees by type
+        $.each(employees, function(index, emp) {
+            if (emp.type === type) {
+                $employeeList.append('<option value="' + emp.id + '">' + emp.name +
+                    '</option>');
+            }
+        });
+    });
+});
+$(document).ready(function() {
+    // Handle team assignment form submit
+    $('#teamForm').on('submit', function(e) {
+        e.preventDefault(); // stop normal form submit
+
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'POST',
+            data: $(this).serialize(),
+            success: function(response) {
+                // Close modal
+                $('#teamModal').modal('hide');
+
+                // Refresh team list
+                $('#assignedTeam').load(location.href + " #assignedTeam>*", "");
+            },
+            error: function() {
+                alert('Error saving team assignment');
+            }
+        });
+    });
+
+    // Handle remove member links via AJAX
+    $(document).on('click', '.removeMember', function(e) {
+        e.preventDefault();
+        var url = $(this).attr('href');
+
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function() {
+                $('#assignedTeam').load(location.href + " #assignedTeam>*", "");
+            },
+            error: function() {
+                alert('Error removing member');
+            }
+        });
+    });
+});
 </script>

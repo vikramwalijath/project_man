@@ -153,32 +153,31 @@
         <div class="col-md-4">
             <div class="card shadow-sm border-0 mb-4">
                 <div class="card-header bg-white py-3">
-                    <h6 class="mb-0 fw-bold"><i class="bi bi-person-badge text-warning me-2"></i>Pay Employee</h6>
+                    <h6 class="mb-0 fw-bold">
+                        <i class="bi bi-person-badge text-warning me-2"></i>Pay Employee
+                    </h6>
                 </div>
                 <div class="card-body">
                     <form action="<?= base_url('finance/add_employee_payment') ?>" method="POST"
                         enctype="multipart/form-data">
                         <input type="hidden" name="project_id" value="<?= $project->id ?>">
 
+                        <!-- Worker Dropdown -->
                         <div class="mb-2">
                             <label class="small fw-bold">Select Worker</label>
-                            <select name="worker_info" class="form-select" required>
+                            <select name="employee_id" class="form-select" required>
                                 <option value="">-- Choose Worker --</option>
-                                <?php if($project->carpenter_id): ?>
-                                <option value="carpenter|<?= $project->carpenter_id ?>">Carpenter
-                                    (<?= $project->carpenter_name ?>)</option>
-                                <?php endif; ?>
-                                <?php if($project->painter_id): ?>
-                                <option value="painter|<?= $project->painter_id ?>">Painter
-                                    (<?= $project->painter_name ?>)</option>
-                                <?php endif; ?>
-                                <?php if($project->electrician_id): ?>
-                                <option value="electrician|<?= $project->electrician_id ?>">Electrician
-                                    (<?= $project->electrician_name ?>)</option>
+                                <?php if(!empty($assigned_team)): ?>
+                                <?php foreach($assigned_team as $member): ?>
+                                <option value="<?= $member->id ?>">
+                                    <?= $member->employee_type ?> (<?= $member->employee_name ?>)
+                                </option>
+                                <?php endforeach; ?>
                                 <?php endif; ?>
                             </select>
                         </div>
 
+                        <!-- Paid By -->
                         <div class="mb-2">
                             <label class="small fw-bold">Paid By</label>
                             <select name="paid_by" class="form-select" required>
@@ -192,11 +191,13 @@
                             </select>
                         </div>
 
+                        <!-- Amount Paid -->
                         <div class="mb-2">
                             <label class="small fw-bold">Amount Paid</label>
                             <input type="number" name="amount_paid" class="form-control" required>
                         </div>
 
+                        <!-- Remarks + Date -->
                         <div class="mb-2">
                             <label class="small fw-bold">Remarks / Date</label>
                             <div class="input-group mb-2">
@@ -206,9 +207,11 @@
                             </div>
                         </div>
 
+                        <!-- Attachment -->
                         <div class="mb-3">
-                            <label class="small fw-bold text-primary"><i class="bi bi-paperclip"></i> Attach
-                                Proof</label>
+                            <label class="small fw-bold text-primary">
+                                <i class="bi bi-paperclip"></i> Attach Proof
+                            </label>
                             <input type="file" name="attachment" class="form-control form-control-sm">
                         </div>
 
@@ -217,6 +220,7 @@
                 </div>
             </div>
         </div>
+
     </div>
 
     <div class="row g-4">
@@ -231,6 +235,7 @@
                                 <th>Supplier / Payer</th>
                                 <th>Bill Name</th>
                                 <th class="text-end pe-3">Amount</th>
+                                <th class="text-end pe-3">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -241,20 +246,29 @@
                                 </td>
                                 <td>
                                     <div class="fw-bold small"><?= $sp->supplier_name ?></div>
-                                    <small class="text-muted badge bg-light text-dark border font-monospace">Paid By:
-                                        <?= $sp->payer_name ?: 'System' ?></small>
+                                    <small class="text-muted badge bg-light text-dark border font-monospace">
+                                        Paid By: <?= $sp->payer_name ?: 'System' ?>
+                                    </small>
                                 </td>
                                 <td class="text-muted small">
                                     <?= $sp->invoice_name ?>
                                     <?php if($sp->file_attachment): ?>
-                                    <br><a href="<?= base_url('uploads/payments/'.$sp->file_attachment) ?>"
-                                        target="_blank" class="text-info x-small text-decoration-none">
+                                    <br>
+                                    <a href="<?= base_url('uploads/payments/'.$sp->file_attachment) ?>" target="_blank"
+                                        class="text-info x-small text-decoration-none">
                                         <i class="bi bi-file-earmark-text"></i> View Bill
                                     </a>
                                     <?php endif; ?>
                                 </td>
                                 <td class="text-end pe-3 fw-bold text-danger">
                                     ₹<?= number_format($sp->amount_sent, 2) ?>
+                                </td>
+                                <td class="text-end pe-3">
+                                    <a href="<?= base_url('projects/delete_supplier_payment/'.$sp->id.'/'.$project->id) ?>"
+                                        class="btn btn-sm btn-outline-danger"
+                                        onclick="return confirm('Are you sure you want to delete this supplier payment record?');">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
                                 </td>
                             </tr>
                             <?php endforeach; ?>
@@ -263,6 +277,7 @@
                 </div>
             </div>
         </div>
+
         <div class="col-md-6">
             <div class="card shadow-sm border-0 h-100">
                 <div class="card-header bg-white fw-bold border-0 pt-3">Employee Ledger</div>
@@ -274,6 +289,7 @@
                                 <th>Worker / Type</th>
                                 <th>Paid By</th>
                                 <th class="text-end pe-3">Amount</th>
+                                <th class="text-end pe-3">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -284,7 +300,7 @@
                                 </td>
                                 <td>
                                     <span class="fw-bold"><?= $ep->worker_name ?></span><br>
-                                    <small class="text-muted"><?= ucfirst($ep->employee_type) ?></small>
+                                    <small class="text-muted"><?= ucfirst($ep->worker_type) ?></small>
                                 </td>
                                 <td>
                                     <span class="badge bg-light text-dark border font-monospace"
@@ -301,6 +317,13 @@
                                     </a>
                                     <?php endif; ?>
                                 </td>
+                                <td class="text-end pe-3">
+                                    <a href="<?= base_url('projects/delete_employee_payment/'.$ep->id.'/'.$project->id) ?>"
+                                        class="btn btn-sm btn-outline-danger"
+                                        onclick="return confirm('Are you sure you want to delete this payment record?');">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </td>
                             </tr>
                             <?php endforeach; ?>
                         </tbody>
@@ -308,6 +331,8 @@
                 </div>
             </div>
         </div>
+
+
         <div class="col-md-12 mt-3">
             <div class="card shadow border-0 mt-4">
                 <div class="card-header bg-white py-3">

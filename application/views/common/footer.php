@@ -5,15 +5,13 @@
 
 <script>
 $(document).ready(function() {
-    $('#projectTable').DataTable({
-        "order": [
-            [0, "desc"]
-        ], // Sort by Date by default
-        "pageLength": 10,
-        "language": {
-            "search": "_INPUT_",
-            "searchPlaceholder": "Search projects, clients, or workers..."
-        }
+    $(document).ready(function() {
+        $('#projectTable').DataTable({
+            pageLength: 10,
+            lengthMenu: [5, 10, 25, 50],
+            ordering: true,
+            searching: true
+        });
     });
 });
 
@@ -47,6 +45,17 @@ $(document).ready(function() {
         "searching": true,
         "language": {
             "search": "Search Invoices:"
+        }
+    });
+});
+$(document).ready(function() {
+    $('#employeeTable').DataTable({
+        pageLength: 10,
+        lengthMenu: [5, 10, 25, 50],
+        ordering: true,
+        searching: true,
+        language: {
+            search: "Filter records:"
         }
     });
 });

@@ -1,10 +1,13 @@
 <div class="container mt-4">
-    <h3 class="fw-bold">
-        <i class="bi bi-cash-stack text-success"></i> Payments for <?= ucfirst($employee->name) ?>
-    </h3>
+    <h4 class="fw-bold">
+        <i class="bi bi-cash-stack text-success"></i> Payments to
+        <span class="badge bg-soft-warning text-warning border border-warning-subtle">
+            <?= ucfirst($employee->name) ?>
+        </span>
+
+    </h4>
     <p class="text-muted">
-        Category: <?= ucfirst($employee->employee_type ?? $this->uri->segment(3)) ?>
-        | Phone: <?= $employee->phone ?>
+        Category: <?= ucfirst($employee->type) ?> | Phone: <?= $employee->phone ?: '---' ?>
     </p>
 
     <div class="card shadow-sm border-0 mt-3">
@@ -29,7 +32,7 @@
                         <td class="fw-bold text-success">
                             <?= $p->amount_paid ? '₹'.number_format($p->amount_paid,2) : '---' ?>
                         </td>
-                        <td><?= $p->paid_by ?: '---' ?></td>
+                        <td><?= $p->paid_by_name ?: '---' ?></td>
                         <td><?= $p->remarks ?: '---' ?></td>
                         <td>
                             <?php if($p->file_attachment): ?>
@@ -41,7 +44,7 @@
                             ---
                             <?php endif; ?>
                         </td>
-                        <td><?= $p->created_by ?: '---' ?></td>
+                        <td><?= $p->created_by_name ?: '---' ?></td>
                     </tr>
                     <?php endforeach; ?>
                 </tbody>
@@ -49,12 +52,11 @@
                     <tr class="table-secondary fw-bold">
                         <td colspan="2">Total</td>
                         <td class="text-success">
-                            ₹<?= number_format(array_sum(array_map(function($p) { return $p->amount_paid; }, $payments)), 2) ?>
+                            ₹<?= number_format(array_sum(array_map(function($p) { return (float)$p->amount_paid; }, $payments)), 2) ?>
                         </td>
                         <td colspan="4"></td>
                     </tr>
                 </tfoot>
-
             </table>
         </div>
     </div>

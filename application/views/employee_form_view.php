@@ -1,39 +1,48 @@
 <div class="container mt-5">
     <div class="row justify-content-center">
-        <div class="col-md-5">
-            <div class="card shadow">
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm">
                 <div class="card-header bg-primary text-white">
-                    <h5><?= isset($employee) ? 'Edit' : 'Add' ?> Employee</h5>
+                    <h5 class="mb-0"><?= isset($employee) ? 'Edit Employee' : 'Add Employee' ?></h5>
                 </div>
                 <div class="card-body">
                     <form action="<?= base_url('employees/save'); ?>" method="POST">
                         <input type="hidden" name="id" value="<?= isset($employee) ? $employee->id : '' ?>">
 
+                        <!-- Employee Type -->
                         <div class="mb-3">
-                            <label>Category</label>
-                            <select name="emp_type" class="form-select" <?= isset($employee) ? 'disabled' : 'required' ?>>
-                                <option value="carpenter" <?= (isset($type) && $type == 'carpenter') ? 'selected' : '' ?>>Carpenter</option>
-                                <option value="painter" <?= (isset($type) && $type == 'painter') ? 'selected' : '' ?>>Painter</option>
-                                <option value="electrician" <?= (isset($type) && $type == 'electrician') ? 'selected' : '' ?>>Electrician</option>
+                            <label class="form-label">Category</label>
+                            <select name="type" class="form-select" required>
+                                <option value="">-- Select Category --</option>
+                                <?php foreach($employee_types as $et): ?>
+                                <option value="<?= $et->type_name ?>"
+                                    <?= (isset($employee) && $employee->type == $et->type_name) ? 'selected' : '' ?>>
+                                    <?= ucfirst($et->type_name) ?>
+                                </option>
+                                <?php endforeach; ?>
                             </select>
-                            <?php if(isset($employee)): ?>
-                                <input type="hidden" name="emp_type" value="<?= $type ?>">
-                            <?php endif; ?>
                         </div>
 
+                        <!-- Employee Name -->
                         <div class="mb-3">
-                            <label>Full Name</label>
-                            <input type="text" name="name" class="form-control" value="<?= isset($employee) ? $employee->name : '' ?>" required>
+                            <label class="form-label">Full Name</label>
+                            <input type="text" name="name" class="form-control"
+                                value="<?= isset($employee) ? $employee->name : '' ?>" required>
                         </div>
 
+                        <!-- Employee Phone -->
                         <div class="mb-3">
-                            <label>Phone</label>
-                            <input type="text" name="phone" class="form-control" value="<?= isset($employee) ? $employee->phone : '' ?>">
+                            <label class="form-label">Phone</label>
+                            <input type="text" name="phone" class="form-control"
+                                value="<?= isset($employee) ? $employee->phone : '' ?>">
                         </div>
 
+                        <!-- Buttons -->
                         <div class="d-flex justify-content-between">
-                            <a href="<?= base_url('employees'); ?>" class="btn btn-light">Back</a>
-                            <button type="submit" class="btn btn-success">Save Changes</button>
+                            <a href="<?= base_url('employees'); ?>" class="btn btn-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-success">
+                                <?= isset($employee) ? 'Update Employee' : 'Save Employee' ?>
+                            </button>
                         </div>
                     </form>
                 </div>
