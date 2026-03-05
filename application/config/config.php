@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined( 'BASEPATH' ) OR exit( 'No direct script access allowed' );
 
 /*
 |--------------------------------------------------------------------------
@@ -15,7 +15,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 | If it is not set, then CodeIgniter will try to guess the protocol and
 | path to your installation, but due to security concerns the hostname will
-| be set to $_SERVER['SERVER_ADDR'] if available, or localhost otherwise.
+| be set to $_SERVER[ 'SERVER_ADDR' ] if available, or localhost otherwise.
 | The auto-detection mechanism exists only for convenience during
 | development and MUST NOT be used in production!
 |
@@ -23,7 +23,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://localhost/bcit-ci-CodeIgniter-bcb17eb/';
+$config[ 'base_url' ] = '';
+//http://localhost/bcit-ci-CodeIgniter-bcb17eb/
 
 /*
 |--------------------------------------------------------------------------
@@ -52,7 +53,8 @@ $config['index_page'] = '';
 |
 | WARNING: If you set this to 'PATH_INFO', URIs will always be URL-decoded!
 */
-$config['uri_protocol']	= 'REQUEST_URI';
+// $config['uri_protocol']	= 'REQUEST_URI';
+$config['uri_protocol'] = 'PATH_INFO';
 
 /*
 |--------------------------------------------------------------------------
@@ -155,12 +157,12 @@ $config['composer_autoload'] = FALSE;
 | Leave blank to allow all characters -- but only if you are insane.
 |
 | The configured value is actually a regular expression character group
-| and it will be executed as: ! preg_match('/^[<permitted_uri_chars>]+$/i
+| and it will be executed as: ! preg_match('/^[ <permitted_uri_chars> ]+$/i
 |
 | DO NOT CHANGE THIS UNLESS YOU FULLY UNDERSTAND THE REPERCUSSIONS!!
 |
 */
-$config['permitted_uri_chars'] = 'a-z 0-9~%.:_\-';
+$config[ 'permitted_uri_chars' ] = 'a-z 0-9~%.:_\-';
 
 /*
 |--------------------------------------------------------------------------
@@ -171,13 +173,13 @@ $config['permitted_uri_chars'] = 'a-z 0-9~%.:_\-';
 | example.com/who/what/where/
 |
 | You can optionally enable standard query string based URLs:
-| example.com?who=me&what=something&where=here
+| example.com?who = me&what = something&where = here
 |
-| Options are: TRUE or FALSE (boolean)
+| Options are: TRUE or FALSE ( boolean )
 |
 | The other items let you set the query string 'words' that will
 | invoke your controllers and its functions:
-| example.com/index.php?c=controller&m=function
+| example.com/index.php?c = controller&m = function
 |
 | Please note that some of the helpers won't work as expected when
 | this feature is enabled, since CodeIgniter is designed primarily to
@@ -221,11 +223,11 @@ $config['allow_get_array'] = TRUE;
 |
 | 	array(2) = Debug Messages, without Error Messages
 |
-| For a live site you'll usually only enable Errors (1) to be logged otherwise
+| For a live site you'll usually only enable Errors ( 1 ) to be logged otherwise
 | your log files will fill up very fast.
 |
 */
-$config['log_threshold'] = 0;
+$config[ 'log_threshold' ] = 0;
 
 /*
 |--------------------------------------------------------------------------
@@ -236,7 +238,7 @@ $config['log_threshold'] = 0;
 | application/logs/ directory. Use a full server path with trailing slash.
 |
 */
-$config['log_path'] = '';
+$config[ 'log_path' ] = '';
 
 /*
 |--------------------------------------------------------------------------
@@ -250,7 +252,7 @@ $config['log_path'] = '';
 | Note: Leaving it blank will default to 'php'.
 |
 */
-$config['log_file_extension'] = '';
+$config[ 'log_file_extension' ] = '';
 
 /*
 |--------------------------------------------------------------------------
@@ -259,10 +261,10 @@ $config['log_file_extension'] = '';
 |
 | The file system permissions to be applied on newly created log files.
 |
-| IMPORTANT: This MUST be an integer (no quotes) and you MUST use octal
-|            integer notation (i.e. 0700, 0644, etc.)
+| IMPORTANT: This MUST be an integer ( no quotes ) and you MUST use octal
+|            integer notation ( i.e. 0700, 0644, etc. )
 */
-$config['log_file_permissions'] = 0644;
+$config[ 'log_file_permissions' ] = 0644;
 
 /*
 |--------------------------------------------------------------------------
@@ -273,7 +275,7 @@ $config['log_file_permissions'] = 0644;
 | codes to set your own date formatting
 |
 */
-$config['log_date_format'] = 'Y-m-d H:i:s';
+$config[ 'log_date_format' ] = 'Y-m-d H:i:s';
 
 /*
 |--------------------------------------------------------------------------
@@ -284,7 +286,7 @@ $config['log_date_format'] = 'Y-m-d H:i:s';
 | application/views/errors/ directory.  Use a full server path with trailing slash.
 |
 */
-$config['error_views_path'] = '';
+$config[ 'error_views_path' ] = '';
 
 /*
 |--------------------------------------------------------------------------
@@ -295,7 +297,7 @@ $config['error_views_path'] = '';
 | application/cache/ directory.  Use a full server path with trailing slash.
 |
 */
-$config['cache_path'] = '';
+$config[ 'cache_path' ] = '';
 
 /*
 |--------------------------------------------------------------------------
@@ -309,11 +311,11 @@ $config['cache_path'] = '';
 |	TRUE       = Enabled, take all query parameters into account.
 |	             Please be aware that this may result in numerous cache
 |	             files generated for the same page over and over again.
-|	array('q') = Enabled, but only take into account the specified list
+|	array( 'q' ) = Enabled, but only take into account the specified list
 |	             of query parameters.
 |
 */
-$config['cache_query_string'] = FALSE;
+$config[ 'cache_query_string' ] = FALSE;
 
 /*
 |--------------------------------------------------------------------------
@@ -326,7 +328,7 @@ $config['cache_query_string'] = FALSE;
 | https://codeigniter.com/userguide3/libraries/encryption.html
 |
 */
-$config['encryption_key'] = 'my_secret_key_123';
+$config[ 'encryption_key' ] = 'my_secret_key_123';
 
 /*
 |--------------------------------------------------------------------------
@@ -339,16 +341,16 @@ $config['encryption_key'] = 'my_secret_key_123';
 |
 | 'sess_cookie_name'
 |
-|	The session cookie name, must contain only [0-9a-z_-] characters
+|	The session cookie name, must contain only [ 0-9a-z_- ] characters
 |
 | 'sess_samesite'
 |
-|	Session cookie SameSite attribute: Lax (default), Strict or None
+|	Session cookie SameSite attribute: Lax ( default ), Strict or None
 |
 | 'sess_expiration'
 |
 |	The number of SECONDS you want the session to last.
-|	Setting to 0 (zero) means expire when the browser is closed.
+|	Setting to 0 ( zero ) means expire when the browser is closed.
 |
 | 'sess_save_path'
 |
@@ -383,14 +385,14 @@ $config['encryption_key'] = 'my_secret_key_123';
 | except for 'cookie_prefix' and 'cookie_httponly', which are ignored here.
 |
 */
-$config['sess_driver'] = 'files';
-$config['sess_cookie_name'] = 'ci_session';
-$config['sess_samesite'] = 'Lax';
-$config['sess_expiration'] = 7200;
-$config['sess_save_path'] = NULL;
-$config['sess_match_ip'] = FALSE;
-$config['sess_time_to_update'] = 300;
-$config['sess_regenerate_destroy'] = FALSE;
+$config[ 'sess_driver' ] = 'files';
+$config[ 'sess_cookie_name' ] = 'ci_session';
+$config[ 'sess_samesite' ] = 'Lax';
+$config[ 'sess_expiration' ] = 7200;
+$config[ 'sess_save_path' ] = NULL;
+$config[ 'sess_match_ip' ] = FALSE;
+$config[ 'sess_time_to_update' ] = 300;
+$config[ 'sess_regenerate_destroy' ] = FALSE;
 
 /*
 |--------------------------------------------------------------------------
@@ -401,7 +403,7 @@ $config['sess_regenerate_destroy'] = FALSE;
 | 'cookie_domain'   = Set to .your-domain.com for site-wide cookies
 | 'cookie_path'     = Typically will be a forward slash
 | 'cookie_secure'   = Cookie will only be set if a secure HTTPS connection exists.
-| 'cookie_httponly' = Cookie will only be accessible via HTTP(S) (no javascript)
+| 'cookie_httponly' = Cookie will only be accessible via HTTP( S ) ( no javascript )
 | 'cookie_samesite' = Cookie's samesite attribute (Lax, Strict or None)
 |
 | Note: These settings (with the exception of 'cookie_prefix' and
@@ -497,7 +499,7 @@ $config['compress_output'] = FALSE;
 | helper' page of the user guide for information regarding date handling.
 |
 */
-$config['time_reference'] = 'local';
+$config[ 'time_reference' ] = 'local';
 
 /*
 |--------------------------------------------------------------------------
@@ -506,12 +508,12 @@ $config['time_reference'] = 'local';
 |
 | If your PHP installation does not have short tag support enabled CI
 | can rewrite the tags on-the-fly, enabling you to utilize that syntax
-| in your view files.  Options are TRUE or FALSE (boolean)
+| in your view files.  Options are TRUE or FALSE ( boolean )
 |
 | Note: You need to have eval() enabled for this to work.
 |
 */
-$config['rewrite_short_tags'] = FALSE;
+$config[ 'rewrite_short_tags' ] = FALSE;
 
 /*
 |--------------------------------------------------------------------------
@@ -526,7 +528,7 @@ $config['rewrite_short_tags'] = FALSE;
 | You can use both an array or a comma-separated list of proxy addresses,
 | as well as specifying whole subnets. Here are a few examples:
 |
-| Comma-separated:	'10.0.1.200,192.168.5.0/24'
+| Comma-separated:	'10.0.1.200, 192.168.5.0/24'
 | Array:		array('10.0.1.200', '192.168.5.0/24')
 */
 $config['proxy_ips'] = '';
