@@ -73,15 +73,13 @@ Whether verify the server certificate or not
 */
 $active_group = 'default';
 $query_builder = TRUE;
-// Parse the Heroku Database URL
-$url = parse_url( getenv( 'JAWSDB_URL' ) ? getenv( 'JAWSDB_URL' ) : getenv( 'CLEARDB_DATABASE_URL' ) );
 
 $db[ 'default' ] = array(
     'dsn'	=> '',
-    'hostname' => $url[ 'host' ] ?? 'localhost',
-    'username' => $url[ 'user' ] ?? 'root',
-    'password' => $url[ 'pass' ] ?? '',
-    'database' => substr( $url[ 'path' ] ?? '/local_db', 1 ),
+    'hostname' => 'localhost',
+    'username' => 'root',
+    'password' => '',
+    'database' => 'testing_ci',
     'dbdriver' => 'mysqli',
     'dbprefix' => '',
     'pconnect' => FALSE,
